@@ -76,7 +76,7 @@ function results = compute_all_metrics(clean_signals, noisy_signals, ...
     fprintf('%s\n', repmat('-', 1, 58));
 
     results.mean_segsnr = mean(results.segsnr);
-    results.mean_pesq   = nanmean(results.pesq);
+    results.mean_pesq = mean(results.pesq, 'omitnan');
     results.mean_mse    = mean(results.mse);
 
     fprintf('%-8s  %+10.3f  %8.3f  %14.6e\n', 'MEAN', ...

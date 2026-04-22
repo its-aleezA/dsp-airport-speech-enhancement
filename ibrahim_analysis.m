@@ -14,7 +14,7 @@
 clc; clear; close all;
 
 %% 0. CONFIGURATION
-DATA_ROOT   = 'noizeus';          % <-- set this to your local NOIZEUS path
+DATA_ROOT   = '';          % <-- set this to your local NOIZEUS path
 CLEAN_DIR   = fullfile(DATA_ROOT, 'clean');
 NOISY_DIR   = fullfile(DATA_ROOT, 'noisy');
 FIG_DIR     = '../figures';
@@ -187,7 +187,7 @@ end
 
 fprintf('%s\n', repmat('-', 1, 46));
 fprintf('%-8s  %+10.3f  %8.3f  %12.6e\n', 'MEAN', ...
-    mean(all_segsnr), nanmean(all_pesq), mean(all_mse));
+    mean(all_segsnr), mean(all_pesq,'omitnan'), mean(all_mse));
 fprintf('\nNote: PESQ shown as NaN if Audio Toolbox is unavailable.\n');
 
 % Save baseline metrics workspace so Shaheer can load and extend it
