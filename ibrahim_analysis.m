@@ -14,10 +14,10 @@
 clc; clear; close all;
 
 %% 0. CONFIGURATION
-DATA_ROOT   = '';          % <-- set this to your local NOIZEUS path
+DATA_ROOT   = 'noizeus';          % <-- set this to your local NOIZEUS path
 CLEAN_DIR   = fullfile(DATA_ROOT, 'clean');
 NOISY_DIR   = fullfile(DATA_ROOT, 'noisy');
-FIG_DIR     = '../figures';
+FIG_DIR = fullfile(fileparts(mfilename('fullpath')), 'figures');
 if ~exist(FIG_DIR, 'dir'), mkdir(FIG_DIR); end
 
 % Sentences to process (sp01 … sp10 as minimum; extend to sp30 for full corpus)

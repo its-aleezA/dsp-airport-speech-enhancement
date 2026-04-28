@@ -16,7 +16,7 @@
 clc; clear; close all;
 
 %% ── 0. CONFIGURATION ────────────────────────────────────────────────────
-FIG_DIR = '../figures';
+FIG_DIR = 'figures';
 if ~exist(FIG_DIR, 'dir'), mkdir(FIG_DIR); end
 
 %% ── 1. LOAD WORKSPACE DATA ──────────────────────────────────────────────
@@ -33,6 +33,14 @@ end
 load('enhanced_signals.mat');   % → enhanced_signals (cell), proc_times (vector)
 
 N = numel(clean_signals);
+
+%% 1.5 APPLY SAME FILTER TO CLEAN REFERENCES FOR FAIR COMPARISON
+[z, p, k] = butter(2, [300 3400]/(Fs/2), 'bandpass');
+sos_ref   = zp2sos(z, p, k);
+
+for k = 1:N
+    clean_signals{k} = sosfilt(sos_ref, clean_signals{k});
+end
 
 %% ── 2. COMPUTE ENHANCED METRICS ─────────────────────────────────────────
 fprintf('\nComputing post-filter metrics ...\n');
@@ -128,4 +136,4 @@ results_table.enhanced_mse    = enh_results.mse;
 results_table.proc_time       = enh_results.proc_time;
 
 save('results_table.mat', 'results_table');
-fprintf('\nAll results saved to results_table.mat  →  hand off to A. for the report.\n');
+fprintf('\nAll results saved to results_table.mat\n');
