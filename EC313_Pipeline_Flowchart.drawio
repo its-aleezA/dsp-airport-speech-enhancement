@@ -1,0 +1,189 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="cuF2GPVXlKs4nh7jS-v5" name="Page-1">
+    <mxGraphModel dx="1103" dy="664" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sw_ibrahim" parent="1" style="text;html=1;strokeColor=#1565C0;fillColor=#E3F2FD;fontStyle=1;fontSize=11;verticalAlign=middle;align=center;rounded=1;" value="Ibrahim (ibrahim_analysis.m  /  ibrahim_postfilter_eval.m)" vertex="1">
+          <mxGeometry height="30" width="490" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_shaheer" parent="1" style="text;html=1;strokeColor=#2E7D32;fillColor=#E8F5E9;fontStyle=1;fontSize=11;verticalAlign=middle;align=center;rounded=1;" value="Shaheer (FOR_SHAHEER_filter_interface.m)" vertex="1">
+          <mxGeometry height="30" width="380" x="570" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1565C0;fontColor=#ffffff;strokeColor=#0D47A1;fontStyle=1;fontSize=10;" value="START&#xa;(Run ibrahim_analysis.m)" vertex="1">
+          <mxGeometry height="55" width="200" x="155" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="load_files" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;align=center;" value="Load WAV pairs&#xa;audioread( sp01…sp10_airport_sn5.wav )&#xa;Enforce mono · truncate to min length" vertex="1">
+          <mxGeometry height="55" width="250" x="130" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="waveform" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="Time-Domain Waveform&#xa;plot( t, x_clean ) · plot( t, x_noisy )&#xa;subplot 2×1" vertex="1">
+          <mxGeometry height="55" width="145" x="17.5" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="psd" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="PSD Estimation (Welch)&#xa;pwelch( x, hamming(256), 128, 512, Fs )&#xa;Mark 300 Hz / 3400 Hz&#xa;Identify dominant noise peak" vertex="1">
+          <mxGeometry height="70" width="155" x="182.5" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="spectrogram_in" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="Spectrogram&#xa;spectrogram( x, hamming(256), 192, 512, Fs )&#xa;clim [ −80, +20 ] dB" vertex="1">
+          <mxGeometry height="55" width="140" x="352.5" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="segsnr_base" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="compute_segsnr( xc, xn, Fs )&#xa;25 ms non-overlap frames&#xa;Clip [−10, +35] dB · skip silence" vertex="1">
+          <mxGeometry height="60" width="150" x="15" y="458" as="geometry" />
+        </mxCell>
+        <mxCell id="mse_base" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="MSE&#xa;mean( (xc − xn).^2 )" vertex="1">
+          <mxGeometry height="50" width="150" x="184.5" y="463" as="geometry" />
+        </mxCell>
+        <mxCell id="pesq_base" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="PESQ (ITU P.862)&#xa;pesq( xc, xn, Fs )&#xa;[N/A — toolbox absent]" vertex="1">
+          <mxGeometry height="50" width="145" x="349.5" y="463" as="geometry" />
+        </mxCell>
+        <mxCell id="save_baseline" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F57F17;fontSize=9;" value="save( &#39;baseline_metrics.mat&#39; )&#xa;clean_signals · noisy_signals · Fs&#xa;file_labels · all_segsnr · all_mse" vertex="1">
+          <mxGeometry height="60" width="200" x="159.5" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="load_baseline" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F57F17;fontSize=9;" value="load( &#39;baseline_metrics.mat&#39; )&#xa;clean_signals · noisy_signals · Fs" vertex="1">
+          <mxGeometry height="55" width="200" x="595" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="filter_design" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;fontSize=9;" value="Filter Design&#xa;butter( 2, [300 3400]/(Fs/2), &#39;bandpass&#39; )&#xa;→ [z, p, k]  (zero-pole-gain)&#xa;zp2sos( z, p, k )  →  sos matrix" vertex="1">
+          <mxGeometry height="70" width="230" x="580" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="filter_plots" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;fontSize=9;" value="Plot Filter Characteristics&#xa;freqz( sos, 1024, Fs )&#xa;grpdelay( sos, 1024, Fs )&#xa;exportgraphics → figures/" vertex="1">
+          <mxGeometry height="70" width="190" x="835" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="filtering" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;fontSize=9;" value="Filtering Loop (k = 1:10)&#xa;sosfilt( sos, noisy_signals{k} )&#xa;tic / toc  →  proc_times(k)" vertex="1">
+          <mxGeometry height="65" width="230" x="580" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="save_enhanced" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F57F17;fontSize=9;" value="save( &#39;enhanced_signals.mat&#39; )&#xa;enhanced_signals · proc_times" vertex="1">
+          <mxGeometry height="60" width="200" x="595" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="load_enhanced" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F57F17;fontSize=9;" value="load( &#39;enhanced_signals.mat&#39; )&#xa;load( &#39;baseline_metrics.mat&#39; )" vertex="1">
+          <mxGeometry height="55" width="200" x="155" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="fair_ref" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="Re-filter clean references&#xa;sosfilt( sos_ref, clean_signals{k} )&#xa;(fair comparison — same BPF applied)" vertex="1">
+          <mxGeometry height="60" width="190" x="52.5" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="enh_metrics" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="compute_all_metrics(&#xa;  clean_signals, noisy_signals,&#xa;  enhanced_signals, file_labels, Fs )&#xa;→ SegSNR · PESQ · MSE per sentence" vertex="1">
+          <mxGeometry height="65" width="200" x="257.5" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="spectrogram_triptych" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="Spectrogram Triptych (per sentence)&#xa;spectrogram( xc / xn / xe, … )&#xa;yline 0.3 kHz, 3.4 kHz&#xa;exportgraphics → figures/" vertex="1">
+          <mxGeometry height="65" width="190" x="500" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="save_results" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F57F17;fontSize=9;" value="save( &#39;results_table.mat&#39; )&#xa;labels · baseline_* · enhanced_* · proc_time" vertex="1">
+          <mxGeometry height="60" width="200" x="155" y="955" as="geometry" />
+        </mxCell>
+        <mxCell id="end_node" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1565C0;fontColor=#ffffff;strokeColor=#0D47A1;fontStyle=1;fontSize=10;" value="END&#xa;Report / Figures Ready" vertex="1">
+          <mxGeometry height="50" width="200" x="155" y="1060" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="start" style="edgeStyle=orthogonalEdgeStyle;" target="load_files">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="load_files" style="edgeStyle=orthogonalEdgeStyle;" target="waveform">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="load_files" style="edgeStyle=orthogonalEdgeStyle;" target="psd">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="255" y="300" />
+              <mxPoint x="255" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="load_files" style="edgeStyle=orthogonalEdgeStyle;" target="spectrogram_in">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="waveform" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="segsnr_base">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="360" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="psd" style="edgeStyle=orthogonalEdgeStyle;" target="mse_base">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="spectrogram_in" style="edgeStyle=orthogonalEdgeStyle;" target="pesq_base">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="segsnr_base" style="edgeStyle=orthogonalEdgeStyle;" target="save_baseline">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="mse_base" style="edgeStyle=orthogonalEdgeStyle;" target="save_baseline">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="pesq_base" style="edgeStyle=orthogonalEdgeStyle;" target="save_baseline">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff1" edge="1" parent="1" source="save_baseline" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#F57F17;fontColor=#F57F17;fontSize=8;fontStyle=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="load_baseline" value="File handoff">
+          <mxGeometry relative="1" x="0.1714" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="540" y="590" />
+              <mxPoint x="540" y="108" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="load_baseline" style="edgeStyle=orthogonalEdgeStyle;" target="filter_design">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="filter_design" style="edgeStyle=orthogonalEdgeStyle;" target="filter_plots">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="filter_design" style="edgeStyle=orthogonalEdgeStyle;" target="filtering">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="filtering" style="edgeStyle=orthogonalEdgeStyle;" target="save_enhanced">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff2" edge="1" parent="1" source="save_enhanced" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#F57F17;fontColor=#F57F17;fontSize=8;fontStyle=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitPerimeter=0;entryPerimeter=0;" target="load_enhanced" value="File handoff">
+          <mxGeometry relative="1" x="-0.4887" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="695" y="688" />
+              <mxPoint x="255" y="688" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="load_enhanced" style="edgeStyle=orthogonalEdgeStyle;" target="fair_ref">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="load_enhanced" style="edgeStyle=orthogonalEdgeStyle;" target="enh_metrics">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="load_enhanced" style="edgeStyle=orthogonalEdgeStyle;" target="spectrogram_triptych">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="fair_ref" style="edgeStyle=orthogonalEdgeStyle;" target="save_results">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="enh_metrics" style="edgeStyle=orthogonalEdgeStyle;" target="save_results">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="spectrogram_triptych" style="edgeStyle=orthogonalEdgeStyle;" target="save_results">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="595" y="980" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="save_results" style="edgeStyle=orthogonalEdgeStyle;" target="end_node">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_title" parent="1" style="text;html=1;fontStyle=1;fontSize=10;" value="LEGEND" vertex="1">
+          <mxGeometry height="20" width="120" x="870" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_ibr" parent="1" style="rounded=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" value="Ibrahim processing" vertex="1">
+          <mxGeometry height="28" width="155" x="870" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_sha" parent="1" style="rounded=1;fillColor=#C8E6C9;strokeColor=#2E7D32;fontSize=9;" value="Shaheer processing" vertex="1">
+          <mxGeometry height="28" width="155" x="870" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_file" parent="1" style="shape=cylinder3;fillColor=#FFF9C4;strokeColor=#F57F17;fontSize=9;" value="MAT file (disk I/O)" vertex="1">
+          <mxGeometry height="35" width="155" x="870" y="475" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_handoff" parent="1" style="text;html=1;fontSize=9;strokeColor=#F57F17;fontColor=#F57F17;fontStyle=3;align=center;" value="File handoff (dashed)" vertex="1">
+          <mxGeometry height="20" width="155" x="870" y="518" as="geometry" />
+        </mxCell>
+        <mxCell id="tfa_header" parent="1" style="text;html=1;fontStyle=1;fontSize=9;fillColor=#E3F2FD;strokeColor=#1565C0;rounded=1;align=center;" value="TIME-FREQUENCY ANALYSIS (sp01)" vertex="1">
+          <mxGeometry height="22" width="490" x="10" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="baseline_hdr" parent="1" style="text;html=1;fontStyle=1;fontSize=9;fillColor=#E3F2FD;strokeColor=#1565C0;rounded=1;align=center;" value="BASELINE METRICS (all 10 sentences)" vertex="1">
+          <mxGeometry height="22" width="490" x="14.5" y="408" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
